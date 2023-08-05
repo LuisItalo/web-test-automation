@@ -3,31 +3,33 @@ package steps;
 import cucumber.api.java.pt.Dado;
 import cucumber.api.java.pt.Entao;
 import cucumber.api.java.pt.Quando;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class DescontosStep {
 
-    WebDriver driver = new FirefoxDriver();
+import pages.HomePage;
+import runner.RunTest;
+
+public class DescontosStep extends RunTest {
+
+    HomePage homePage = new HomePage(driver);
 
     @Dado("que estou no site da qazando$")
     public void acessar_site_qazando(){
-        driver.get("https://www.qazando.com.br/");
+        homePage.acessarAplicacao();
     }
 
     @Quando("^preencho meu email$")
-    public void preencho_meu_email() {
-
+    public void preencho_meu_email() throws InterruptedException {
+        homePage.scrollDown();
+        homePage.preencheEmail();
     }
 
     @Quando("^clico em ganhar cupom$")
     public void clico_em_ganhar_cupom() {
-
+        homePage.ganharDescClick();
     }
 
     @Entao("^vejo o codigo de desconto$")
     public void vejo_o_codigo_de_desconto() {
-
+        homePage.verifiCupom();
     }
 }
