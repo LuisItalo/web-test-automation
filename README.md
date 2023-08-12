@@ -20,7 +20,12 @@ Os teste foram validados no **Google Chrome** e **Mozilla Firefox**, e eu utiliz
 
 ## Dependências e Plugins
 
-    <dependencies>
+        <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        </properties>
+
+        <dependencies>
         <!-- CUCUMBER: PARA O JUNIT EXECUTAR-->
         <dependency>
             <groupId>info.cukes</groupId>
@@ -39,6 +44,16 @@ Os teste foram validados no **Google Chrome** e **Mozilla Firefox**, e eu utiliz
             <artifactId>selenium-java</artifactId>
             <version>3.141.59</version>
         </dependency>
+        <dependency>
+            <groupId>com.trivago.rta</groupId>
+            <artifactId>cluecumber-report-plugin</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M5</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -53,6 +68,32 @@ Os teste foram validados no **Google Chrome** e **Mozilla Firefox**, e eu utiliz
                     <includes>
                         <include>src/test/java</include>
                     </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.trivago.rta</groupId>
+                <artifactId>cluecumber-report-plugin</artifactId>
+                <version>1.2.0</version>
+                <executions>
+                    <execution>
+                        <id>report</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>reporting</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceJsonReportDirectory>${project.build.directory}/reports</sourceJsonReportDirectory>
+                    <generatedHtmlReportDirectory>${project.build.directory}/formated-report</generatedHtmlReportDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
         </plugins>
@@ -80,3 +121,11 @@ Tendo em mãos os Cenários de cada fluxos de teste (fluxo base e alternativos),
 Para rodar o teste, criei uma pasta **runner** onde contem uma classe **RunTest**
 
 > /home/luis/Java-Code/SeleniumTest/src/test/java/runner/RunTest.java
+
+Para rodar o teste via terminal 
+
+> mvn test -Dtest=**/*RunTest cluecumber-report:reporting
+
+Para Rodar o test selecionando tag via terminal
+
+> mvn test -Dtest=**/*RunTest cluecumber-report:reporting -Dcucumber.options="--tags @gerar-cupom"
